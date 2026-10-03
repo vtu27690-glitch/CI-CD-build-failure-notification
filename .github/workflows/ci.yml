@@ -2,9 +2,9 @@ name: CI Build and Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build-and-test:
@@ -34,9 +34,8 @@ jobs:
           echo "BUILD FAILURE DETECTED"
           echo "=============================="
           echo "Status: FAILED"
-          echo "Failure detected after automated testing."
 
-     - name: Extract Error Log
+      - name: Extract Error Log
         if: ${{ failure() }}
         run: |
           echo "==============================" > failure.log
@@ -45,7 +44,8 @@ jobs:
           echo "Test failure detected." >> failure.log
           pytest -v >> failure.log 2>&1 || true
           cat failure.log
-          - name: Store Failure Information
+
+      - name: Store Failure Information
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
