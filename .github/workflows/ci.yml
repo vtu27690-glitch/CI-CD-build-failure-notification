@@ -48,26 +48,35 @@ jobs:
           echo "Test failure detected." >> failure.log
           pytest -v >> failure.log 2>&1 || true
           cat failure.log
+- name: Store Failure Information
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: failure-log
+        path: failure.log
 
-      - name: Store Failure Information
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: failure-log
-          path: failure.log
-          - name: Send Failure Notification
-  if: ${{ failure() }}
-  uses: actions/github-script@v7
-  with:
-    script: |
-      await github.rest.issues.create({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        title: "CI Build Failure Detected",
-        body: `Build failure detected.
+    - name: Send Failure Notification
+      if: ${{ failure() }}
+      uses: actions/github-script@v7
+      with:
+        script: |
+          await github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: "CI Build Failure Detected",
+            body: `Build failure detected.
 
 Run: ${context.runNumber}
 Commit: ${context.sha}
 
 Please check the GitHub Actions logs and failure-log artifact.`
-      })
+          })
+
+
+
+
+
+
+
+
+    
