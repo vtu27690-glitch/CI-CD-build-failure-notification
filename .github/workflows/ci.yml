@@ -35,3 +35,12 @@ jobs:
           echo "================================"
           echo "Status: FAILED"
           echo "Failure detected after automated testing."
+          - name: Extract Error Log
+        if: ${{ failure() }}
+        run: |
+          echo "=============================="
+          echo "ERROR / LOG DETAILS"
+          echo "=============================="
+          echo "Test failure detected."
+          echo "Checking test output..."
+          pytest -v 2>&1 || true
