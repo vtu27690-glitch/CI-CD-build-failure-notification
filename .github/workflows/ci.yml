@@ -26,3 +26,11 @@ jobs:
 
       - name: Run tests
         run: pytest -v
+        - name: Detect Build Failure
+  if: failure()
+  run: |
+    echo "================================"
+    echo "BUILD FAILURE DETECTED"
+    echo "================================"
+    echo "Status: FAILED"
+    echo "Failure detected after automated testing."
