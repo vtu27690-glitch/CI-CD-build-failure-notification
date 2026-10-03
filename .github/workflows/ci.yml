@@ -30,12 +30,13 @@ jobs:
       - name: Detect Build Failure
         if: ${{ failure() }}
         run: |
-          echo "================================"
+          echo "=============================="
           echo "BUILD FAILURE DETECTED"
-          echo "================================"
+          echo "=============================="
           echo "Status: FAILED"
           echo "Failure detected after automated testing."
-          - name: Extract Error Log
+
+      - name: Extract Error Log
         if: ${{ failure() }}
         run: |
           echo "=============================="
