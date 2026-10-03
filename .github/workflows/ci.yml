@@ -36,12 +36,18 @@ jobs:
           echo "Status: FAILED"
           echo "Failure detected after automated testing."
 
-      - name: Extract Error Log
+     - name: Extract Error Log
         if: ${{ failure() }}
         run: |
-          echo "=============================="
-          echo "ERROR / LOG DETAILS"
-          echo "=============================="
-          echo "Test failure detected."
-          echo "Checking test output..."
-          pytest -v 2>&1 || true
+          echo "==============================" > failure.log
+          echo "ERROR / LOG DETAILS" >> failure.log
+          echo "==============================" >> failure.log
+          echo "Test failure detected." >> failure.log
+          pytest -v >> failure.log 2>&1 || true
+          cat failure.log
+          - name: Store Failure Information
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-log
+          path: failure.log
